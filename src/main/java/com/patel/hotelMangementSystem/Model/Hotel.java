@@ -51,5 +51,7 @@ public class Hotel extends BaseEntity implements Serializable {
 	@Column(name = "hotel_contact_number")
 	@ApiModelProperty(notes = "Contact Number of Hotel")
 	private String hotelContactNumber;
+	
+	
 
 }
