@@ -13,30 +13,18 @@
 	</parent>
 
 	<properties>
+		<start-class>com.patel.hotelMangementSystem</start-class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 	</properties>
 
 	<dependencies>
-		<!-- <dependency>
-
-			<groupId>io.jsonwebtoken</groupId>
-
-			<artifactId>jjwt</artifactId>
-
-			<version>${jjwt.version}</version>
-
-		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency> -->
+		<!-- <dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt</artifactId> 
+			<version>${jjwt.version}</version> </dependency> <dependency> <groupId>io.jsonwebtoken</groupId> 
+			<artifactId>jjwt</artifactId> <version>0.9.1</version> </dependency> <dependency> 
+			<groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
+			</dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 		<dependency>
