@@ -1,12 +1,12 @@
-package com.evmoter.test;
+package com.patel.hotelMangementSystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringBootHelloWorldApplication {
+public class HotelManagementSystem {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootHelloWorldApplication.class, args);
+		SpringApplication.run(HotelManagementSystem.class, args);
 	}
 }
