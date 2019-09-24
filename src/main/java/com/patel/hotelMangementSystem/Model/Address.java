@@ -11,6 +11,7 @@ public class Address implements Serializable {
 	private Double longitude;
 	private Double latitude;
 	private String type;
+	private String postCode;
 
 	public Address() {
 		super();
@@ -18,7 +19,7 @@ public class Address implements Serializable {
 	}
 
 	public Address(String addressLine1, String addressLine2, String city, String state, String country,
-			Double longitude, Double latitude, String type) {
+			Double longitude, Double latitude, String type, String postCode) {
 		super();
 		this.addressLine1 = addressLine1;
 		this.addressLine2 = addressLine2;
@@ -28,6 +29,7 @@ public class Address implements Serializable {
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.type = type;
+		this.postCode = postCode;
 	}
 
 	public String getAddressLine1() {
@@ -94,6 +96,14 @@ public class Address implements Serializable {
 		this.type = type;
 	}
 
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -104,6 +114,7 @@ public class Address implements Serializable {
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+		result = prime * result + ((postCode == null) ? 0 : postCode.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -148,6 +159,11 @@ public class Address implements Serializable {
 				return false;
 		} else if (!longitude.equals(other.longitude))
 			return false;
+		if (postCode == null) {
+			if (other.postCode != null)
+				return false;
+		} else if (!postCode.equals(other.postCode))
+			return false;
 		if (state == null) {
 			if (other.state != null)
 				return false;
@@ -165,7 +181,7 @@ public class Address implements Serializable {
 	public String toString() {
 		return "Address [addressLine1=" + addressLine1 + ", addressLine2=" + addressLine2 + ", city=" + city
 				+ ", state=" + state + ", country=" + country + ", longitude=" + longitude + ", latitude=" + latitude
-				+ ", type=" + type + "]";
+				+ ", type=" + type + ", postCode=" + postCode + "]";
 	}
 
 }
