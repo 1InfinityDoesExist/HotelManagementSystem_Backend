@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
-@Entity(name = "Customer Class")
+@Entity(name = "Customer")
 @Table(name = "customer_table", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "aadhar_card_number", "pan_card_number", "email", "phone_number" }) })
 

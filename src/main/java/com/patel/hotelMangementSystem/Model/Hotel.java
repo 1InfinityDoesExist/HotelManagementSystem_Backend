@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
-@Entity(name = "Hotel Class")
+@Entity(name = "Hotel")
 @Table(name = "hotel", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "hotel_unique_id" }) })
 @Api(value = "Hotel Clas", description = "This is the hotel class")
 @EntityListeners(AuditingEntityListener.class)
@@ -51,7 +51,53 @@ public class Hotel extends BaseEntity implements Serializable {
 	@Column(name = "hotel_contact_number")
 	@ApiModelProperty(notes = "Contact Number of Hotel")
 	private String hotelContactNumber;
-	
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public String getHotelUniqueId() {
+		return hotelUniqueId;
+	}
+
+	public void setHotelUniqueId(String hotelUniqueId) {
+		this.hotelUniqueId = hotelUniqueId;
+	}
+
+	public String getHotelOwner() {
+		return hotelOwner;
+	}
+
+	public void setHotelOwner(String hotelOwner) {
+		this.hotelOwner = hotelOwner;
+	}
+
+	public String getHotelEmail() {
+		return hotelEmail;
+	}
+
+	public void setHotelEmail(String hotelEmail) {
+		this.hotelEmail = hotelEmail;
+	}
+
+	public String getHotelContactNumber() {
+		return hotelContactNumber;
+	}
+
+	public void setHotelContactNumber(String hotelContactNumber) {
+		this.hotelContactNumber = hotelContactNumber;
+	}
 
 }
