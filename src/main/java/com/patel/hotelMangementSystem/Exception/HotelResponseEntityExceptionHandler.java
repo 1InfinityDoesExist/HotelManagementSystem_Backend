@@ -16,4 +16,10 @@ public class HotelResponseEntityExceptionHandler extends ResponseEntityException
 		HotelUniqueIdExceptionResponse response = new HotelUniqueIdExceptionResponse(ex.getMessage());
 		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler
+	public ResponseEntity<?> hotelResponseEntityExponseHandler(RoomUniqueIdException ex, WebRequest webRequest) {
+		RoomUniqueIdExceptionResponse response = new RoomUniqueIdExceptionResponse(ex.getMessage());
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+	}
 }

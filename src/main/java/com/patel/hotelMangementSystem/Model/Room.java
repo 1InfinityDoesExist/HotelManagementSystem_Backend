@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity(name = "Room")
-@Table(name = "room", uniqueConstraints = { @UniqueConstraint(columnNames = { "hotel_unique_id", "room_unique_id" }) })
+@Table(name = "room", uniqueConstraints = { @UniqueConstraint(columnNames = { "room_unique_id" }) })
 public class Room extends BaseEntity implements Serializable {
 
 	@Column(name = "room_unique_id", updatable = false)
