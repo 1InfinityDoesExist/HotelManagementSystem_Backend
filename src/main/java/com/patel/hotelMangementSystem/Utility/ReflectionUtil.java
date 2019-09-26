@@ -16,12 +16,14 @@ public class ReflectionUtil {
 	private static ReflectionUtil refObj;
 
 	@SuppressWarnings("serial")
-	private static HashMap<String, String> objectBeanMap=new HashMap<String,String>(){{
-		put("Hotel","com.patel.hotelMangementSystem.Model.Hotel");
-		put("Address","com.patel.hotelMangementSystem.Model.Address");
-	
+	private static HashMap<String, String> objectBeanMap = new HashMap<String, String>() {
+		{
+			put("Hotel", "com.patel.hotelMangementSystem.Model.Hotel");
+			put("Address", "com.patel.hotelMangementSystem.Model.Address");
+			put("Room", "com.patel.hotelMangementSystem.Model.Room");
 
-	}};
+		}
+	};
 
 	private static HashMap<String, HashMap> objGetterPropsMap = new HashMap<String, HashMap>();
 	private static HashMap<String, HashMap> objSetterPropsMap = new HashMap<String, HashMap>();

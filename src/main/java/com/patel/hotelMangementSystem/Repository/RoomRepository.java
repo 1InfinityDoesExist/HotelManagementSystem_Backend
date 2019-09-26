@@ -22,7 +22,12 @@ public interface RoomRepository extends CrudRepository<Room, Long> {
 
 	@Modifying
 	@Transactional
-	@Query("Update #{#entityName} Room set deleteFlag=true where roonUniqueId=?1")
+	@Query("Update #{#entityName} Room set deleteFlag=true where roomUniqueId=?1")
 	public void deleteRoomByUniqueId(String roomUniqueId);
+
+	@Modifying
+	@Transactional
+	@Query("Update #{#entityName} Room set roomUniqueId=?1 where id=?2")
+	public void updateRoomUniqueId(String roomUniqueId, Long id);
 
 }
