@@ -22,4 +22,31 @@ public class HotelResponseEntityExceptionHandler extends ResponseEntityException
 		RoomUniqueIdExceptionResponse response = new RoomUniqueIdExceptionResponse(ex.getMessage());
 		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler
+	public ResponseEntity<?> aadharCardAlreadyExistHandler(AadharCardNumberAlreadyExistException ex,
+			WebRequest webRequest) {
+		AadharCardNumberAlreadyExistResponse response = new AadharCardNumberAlreadyExistResponse(ex.getMessage());
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<?> panCardNumberAlreadyExistHandler(PanCardNumberAlreadyExistException ex,
+			WebRequest webRequest) {
+		PanCardNumberAlreadyExistResponse response = new PanCardNumberAlreadyExistResponse(ex.getMessage());
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<?> emailIdAlreadyExistException(EmailIdAlreadyExistException ex, WebRequest webRequest) {
+		EmailIdAlreadyExistResponse response = new EmailIdAlreadyExistResponse(ex.getMessage());
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<?> phoneNumberAlreadyExistHandler(PhoneNumberAlreadyExist ex, WebRequest webRequest) {
+		PhoneNumberAlreadyExistResponse response = new PhoneNumberAlreadyExistResponse(ex.getMessage());
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+	}
+
 }
