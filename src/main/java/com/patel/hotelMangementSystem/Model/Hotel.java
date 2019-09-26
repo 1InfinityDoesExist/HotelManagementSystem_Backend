@@ -36,7 +36,7 @@ public class Hotel extends BaseEntity implements Serializable {
 	private Address address;
 
 	@Column(name = "hotel_unique_id", updatable = false)
-	@Size(min = 6, max = 6, message = "Unique Id Must Not Exceed There Values , Should Be of Length 6")
+	@Size(min = 6, max = 12, message = "Unique Id Must Not Exceed There Values , Should Be of Length 6")
 	@ApiModelProperty(notes = "Unique Id given to each hotel")
 	private String hotelUniqueId;
 

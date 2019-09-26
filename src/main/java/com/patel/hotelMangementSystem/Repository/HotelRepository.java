@@ -25,4 +25,9 @@ public interface HotelRepository extends CrudRepository<Hotel, Long> {
 	@Query("UPDATE #{#entityName} Hotel set deleteFlag=true where hotelUniqueId=?1")
 	public void deleteHotel(String hotelUniqueId);
 
+	@Query("Update #{#entityName} Hotel set hotelUniqueId=?1 where id=?2")
+	@Modifying
+	@Transactional
+	public void updateHotelUniqueId(String uniqueIdForHotel, Long id);
+
 }

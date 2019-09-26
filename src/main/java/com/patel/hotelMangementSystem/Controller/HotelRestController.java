@@ -1,5 +1,6 @@
 package com.patel.hotelMangementSystem.Controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.patel.hotelMangementSystem.Model.Hotel;
 import com.patel.hotelMangementSystem.Service.HotelService;
 import com.patel.hotelMangementSystem.Service.MapErrorsToFields;
@@ -64,7 +67,7 @@ public class HotelRestController {
 
 	@PatchMapping(path = "/update/{hotelUniqueId}")
 	public ResponseEntity<?> updateHotelByUniqueId(@Valid @PathVariable(value = "hotelUniqueId") String hotelUniqueId,
-			@RequestBody String hotel) {
+			@RequestBody String hotel) throws JsonParseException, JsonMappingException, IOException {
 		Hotel hotelResponse = hotelService.updateHotelByUniqueId(hotelUniqueId, hotel);
 		return new ResponseEntity<Hotel>(hotelResponse, HttpStatus.OK);
 	}
