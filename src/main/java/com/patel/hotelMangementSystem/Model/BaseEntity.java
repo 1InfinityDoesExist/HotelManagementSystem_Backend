@@ -51,4 +51,114 @@ public class BaseEntity {
 	@ApiModelProperty(notes = "Just To Write Some Brief About The Object We Are Working On")
 	private String notes;
 
+	public BaseEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public BaseEntity(Long id, LocalDateTime creationDate, LocalDateTime modificationDate, Boolean deleteFlag,
+			String notes) {
+		super();
+		this.id = id;
+		this.creationDate = creationDate;
+		this.modificationDate = modificationDate;
+		this.deleteFlag = deleteFlag;
+		this.notes = notes;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(LocalDateTime creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public LocalDateTime getModificationDate() {
+		return modificationDate;
+	}
+
+	public void setModificationDate(LocalDateTime modificationDate) {
+		this.modificationDate = modificationDate;
+	}
+
+	public Boolean getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(Boolean deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+		result = prime * result + ((deleteFlag == null) ? 0 : deleteFlag.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((modificationDate == null) ? 0 : modificationDate.hashCode());
+		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BaseEntity other = (BaseEntity) obj;
+		if (creationDate == null) {
+			if (other.creationDate != null)
+				return false;
+		} else if (!creationDate.equals(other.creationDate))
+			return false;
+		if (deleteFlag == null) {
+			if (other.deleteFlag != null)
+				return false;
+		} else if (!deleteFlag.equals(other.deleteFlag))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (modificationDate == null) {
+			if (other.modificationDate != null)
+				return false;
+		} else if (!modificationDate.equals(other.modificationDate))
+			return false;
+		if (notes == null) {
+			if (other.notes != null)
+				return false;
+		} else if (!notes.equals(other.notes))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BaseEntity [id=" + id + ", creationDate=" + creationDate + ", modificationDate=" + modificationDate
+				+ ", deleteFlag=" + deleteFlag + ", notes=" + notes + "]";
+	}
+
 }
