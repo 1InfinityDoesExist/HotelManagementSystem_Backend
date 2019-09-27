@@ -1,31 +1,40 @@
 package com.patel.hotelMangementSystem.Model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity(name = "Hotel")
-@Table(name = "hotel", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "hotel_unique_id" }) })
+@Table(name = "hotel", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "name", "hotel_unique_id", "hotel_contact_number" }) })
 @Api(value = "Hotel Clas", description = "This is the hotel class")
 @EntityListeners(AuditingEntityListener.class)
 @TypeDefs({ @TypeDef(name = "AddressType", typeClass = AddressType.class) })
 public class Hotel extends BaseEntity implements Serializable {
 
-	@Column(name = "name", updatable = true)
+	@Column(name = "name", updatable = true, unique = true)
 	@NotBlank(message = "Please Do Provide A Name To The Hotel")
 	@ApiModelProperty(notes = "Name of the Hotel")
 	private String name;
@@ -35,8 +44,8 @@ public class Hotel extends BaseEntity implements Serializable {
 	@Type(type = "AddressType")
 	private Address address;
 
-	@Column(name = "hotel_unique_id", updatable = false)
-	@Size(min = 6, max = 12, message = "Unique Id Must Not Exceed There Values , Should Be of Length 6")
+	@Column(name = "hotel_unique_id", updatable = false, unique = true)
+	@Size(min = 6, max = 30, message = "Unique Id Must Not Exceed There Values , Should Be of Length 6 <= x <= 30")
 	@ApiModelProperty(notes = "Unique Id given to each hotel")
 	private String hotelUniqueId;
 
@@ -48,18 +57,29 @@ public class Hotel extends BaseEntity implements Serializable {
 	@ApiModelProperty(notes = "Email Address of The Email")
 	private String hotelEmail;
 
-	@Column(name = "hotel_contact_number")
+	@Column(name = "hotel_contact_number", unique = true)
 	@ApiModelProperty(notes = "Contact Number of Hotel")
+	@NotBlank(message = "HotelConactNumber is Mandatory")
 	private String hotelContactNumber;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "hotelRoom")
+	Set<Room> room = new LinkedHashSet<Room>();
 
 	public Hotel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	public Hotel(Long id, LocalDateTime creationDate, LocalDateTime modificationDate, Boolean deleteFlag,
+			String notes) {
+		super(id, creationDate, modificationDate, deleteFlag, notes);
+		// TODO Auto-generated constructor stub
+	}
+
 	public Hotel(@NotBlank(message = "Please Do Provide A Name To The Hotel") String name, Address address,
-			@Size(min = 6, max = 6, message = "Unique Id Must Not Exceed There Values , Should Be of Length 6") String hotelUniqueId,
-			String hotelOwner, String hotelEmail, String hotelContactNumber) {
+			@Size(min = 6, max = 30, message = "Unique Id Must Not Exceed There Values , Should Be of Length 6 <= x <= 30") String hotelUniqueId,
+			String hotelOwner, String hotelEmail,
+			@NotBlank(message = "HotelConactNumber is Mandatory") String hotelContactNumber) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -67,6 +87,14 @@ public class Hotel extends BaseEntity implements Serializable {
 		this.hotelOwner = hotelOwner;
 		this.hotelEmail = hotelEmail;
 		this.hotelContactNumber = hotelContactNumber;
+	}
+
+	public Set<Room> getRoom() {
+		return room;
+	}
+
+	public void setRoom(Set<Room> room) {
+		this.room = room;
 	}
 
 	public String getName() {

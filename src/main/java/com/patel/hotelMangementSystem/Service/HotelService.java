@@ -2,6 +2,7 @@ package com.patel.hotelMangementSystem.Service;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +45,9 @@ public class HotelService {
 		try {
 			hotel.setDeleteFlag(false);
 			hotel.setNotes("Thank You For Visiting " + hotel.getName());
+			hotel.setHotelUniqueId(hotel.getHotelContactNumber() + "_" + hotel.getName());
 			Hotel hotelToDB = hotelRepository.save(hotel);
-
-			if (hotelToDB != null) {
-				String uniqueIdForHotel = hotelToDB.getName() + "_" + hotelToDB.getId();
-				hotelRepository.updateHotelUniqueId(uniqueIdForHotel, hotelToDB.getId());
-				return hotelRepository.getHotelByUniqueId(uniqueIdForHotel);
-			}
-			return null;
+			return hotelToDB;
 
 		} catch (Exception e) {
 			throw new HotelUniqueIdException(

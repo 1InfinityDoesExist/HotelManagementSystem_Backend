@@ -30,4 +30,7 @@ public interface HotelRepository extends CrudRepository<Hotel, Long> {
 	@Transactional
 	public void updateHotelUniqueId(String uniqueIdForHotel, Long id);
 
+	@Query("SELECT Hotel from #{#entityName} Hotel where id=?1 and deleteFlag=false")
+	public Hotel getHotelByPrimarykey(Long hotelId);
+
 }

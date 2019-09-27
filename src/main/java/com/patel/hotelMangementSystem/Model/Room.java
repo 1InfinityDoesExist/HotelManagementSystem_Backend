@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
@@ -13,6 +17,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -20,18 +25,13 @@ import io.swagger.annotations.ApiModelProperty;
 @Table(name = "room", uniqueConstraints = { @UniqueConstraint(columnNames = { "room_unique_id" }) })
 public class Room extends BaseEntity implements Serializable {
 
-	@Column(name = "room_unique_id", updatable = false)
+	@Column(name = "room_unique_id", updatable = false, unique = true)
 	@ApiModelProperty(notes = "Room Unique Id To Identity Each Room")
 	private String roomUniqueId;
 
 	@Column(name = "status")
 	@ApiModelProperty(notes = "Status of the Room")
 	private String status;
-
-	@Column(name = "hotel_unique_id", updatable = false)
-	@ApiModelProperty(notes = "Hotel Unique Id")
-	@NotBlank(message = "Hotel Unique Id Is Mandatroy Filed")
-	private String hotelUniqueId;
 
 	@Column(name = "booked_from")
 	@ApiModelProperty(notes = "Booked From")
@@ -72,6 +72,14 @@ public class Room extends BaseEntity implements Serializable {
 	@NotBlank(message = "Room Condition Status Cannot be blank")
 	private String roomConditonStatus;
 
+	@Column(name = "hotel_name")
+	@ApiModelProperty(name = "Hotel Name")
+	private String hotelName;
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "hotelUniqueId", nullable = false, updatable = false)
+	private Hotel hotelRoom;
+
 	public Room() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -82,16 +90,13 @@ public class Room extends BaseEntity implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Room(String roomUniqueId, String status,
-			@NotBlank(message = "Hotel Unique Id Is Mandatroy Filed") String hotelUniqueId, Date bookedFrom,
-			Date bookedTo, Date reservedFrom, Date reservedTo, Long totalCost,
-			@NotBlank(message = "Ac / Non Ac Must Be Selected Mandatory Field") String roomColdness,
+	public Room(String roomUniqueId, String status, Date bookedFrom, Date bookedTo, Date reservedFrom, Date reservedTo,
+			Long totalCost, @NotBlank(message = "Ac / Non Ac Must Be Selected Mandatory Field") String roomColdness,
 			@Min(value = 1, message = "Min Number of beds must be 1") @Max(value = 2, message = "Max Number of bes must be 2") Long noOfBeds,
-			@NotBlank(message = "Room Condition Status Cannot be blank") String roomConditonStatus) {
+			@NotBlank(message = "Room Condition Status Cannot be blank") String roomConditonStatus, String hotelName) {
 		super();
 		this.roomUniqueId = roomUniqueId;
 		this.status = status;
-		this.hotelUniqueId = hotelUniqueId;
 		this.bookedFrom = bookedFrom;
 		this.bookedTo = bookedTo;
 		this.reservedFrom = reservedFrom;
@@ -100,6 +105,16 @@ public class Room extends BaseEntity implements Serializable {
 		this.roomColdness = roomColdness;
 		this.noOfBeds = noOfBeds;
 		this.roomConditonStatus = roomConditonStatus;
+		this.hotelName = hotelName;
+	}
+
+	@JsonIgnore
+	public Hotel getHotelRoom() {
+		return hotelRoom;
+	}
+
+	public void setHotelRoom(Hotel hotelRoom) {
+		this.hotelRoom = hotelRoom;
 	}
 
 	public String getRoomUniqueId() {
@@ -116,14 +131,6 @@ public class Room extends BaseEntity implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getHotelUniqueId() {
-		return hotelUniqueId;
-	}
-
-	public void setHotelUniqueId(String hotelUniqueId) {
-		this.hotelUniqueId = hotelUniqueId;
 	}
 
 	public Date getBookedFrom() {
@@ -190,13 +197,21 @@ public class Room extends BaseEntity implements Serializable {
 		this.roomConditonStatus = roomConditonStatus;
 	}
 
+	public String getHotelName() {
+		return hotelName;
+	}
+
+	public void setHotelName(String hotelName) {
+		this.hotelName = hotelName;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((bookedFrom == null) ? 0 : bookedFrom.hashCode());
 		result = prime * result + ((bookedTo == null) ? 0 : bookedTo.hashCode());
-		result = prime * result + ((hotelUniqueId == null) ? 0 : hotelUniqueId.hashCode());
+		result = prime * result + ((hotelName == null) ? 0 : hotelName.hashCode());
 		result = prime * result + ((noOfBeds == null) ? 0 : noOfBeds.hashCode());
 		result = prime * result + ((reservedFrom == null) ? 0 : reservedFrom.hashCode());
 		result = prime * result + ((reservedTo == null) ? 0 : reservedTo.hashCode());
@@ -227,10 +242,10 @@ public class Room extends BaseEntity implements Serializable {
 				return false;
 		} else if (!bookedTo.equals(other.bookedTo))
 			return false;
-		if (hotelUniqueId == null) {
-			if (other.hotelUniqueId != null)
+		if (hotelName == null) {
+			if (other.hotelName != null)
 				return false;
-		} else if (!hotelUniqueId.equals(other.hotelUniqueId))
+		} else if (!hotelName.equals(other.hotelName))
 			return false;
 		if (noOfBeds == null) {
 			if (other.noOfBeds != null)
@@ -277,10 +292,10 @@ public class Room extends BaseEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Room [roomUniqueId=" + roomUniqueId + ", status=" + status + ", hotelUniqueId=" + hotelUniqueId
-				+ ", bookedFrom=" + bookedFrom + ", bookedTo=" + bookedTo + ", reservedFrom=" + reservedFrom
-				+ ", reservedTo=" + reservedTo + ", totalCost=" + totalCost + ", roomColdness=" + roomColdness
-				+ ", noOfBeds=" + noOfBeds + ", roomConditonStatus=" + roomConditonStatus + "]";
+		return "Room [roomUniqueId=" + roomUniqueId + ", status=" + status + ", bookedFrom=" + bookedFrom
+				+ ", bookedTo=" + bookedTo + ", reservedFrom=" + reservedFrom + ", reservedTo=" + reservedTo
+				+ ", totalCost=" + totalCost + ", roomColdness=" + roomColdness + ", noOfBeds=" + noOfBeds
+				+ ", roomConditonStatus=" + roomConditonStatus + ", hotelName=" + hotelName + "]";
 	}
 
 }

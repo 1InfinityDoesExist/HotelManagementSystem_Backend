@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +20,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.patel.hotelMangementSystem.Exception.RoomUniqueIdException;
+import com.patel.hotelMangementSystem.Model.Hotel;
 import com.patel.hotelMangementSystem.Model.Room;
+import com.patel.hotelMangementSystem.Repository.HotelRepository;
 import com.patel.hotelMangementSystem.Repository.RoomRepository;
 import com.patel.hotelMangementSystem.Utility.ReflectionUtil;
 
@@ -32,6 +35,9 @@ public class RoomService {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Autowired
+	private HotelRepository hotelRepository;
+
 	@PostConstruct
 	public void setUp() {
 		objectMapper.registerModule(new JavaTimeModule());
@@ -42,7 +48,7 @@ public class RoomService {
 	public Room createRoom(Room room) {
 		try {
 			Long totalFare = 0l;
-			String hotelUniqueID = room.getHotelUniqueId();
+
 			room.setStatus("AVAILABLE");
 			String acNonAcStatus = room.getRoomColdness();
 			if (acNonAcStatus.equals("AC")) {
@@ -57,15 +63,21 @@ public class RoomService {
 			} else {
 				totalFare = totalFare + 4000;
 			}
+			
 			room.setTotalCost(totalFare + 10000l); // 10000 is depositte;
 			room.setDeleteFlag(false);
 			room.setNotes("Highly Recommended For Couples");
 			room.setRoomConditonStatus("PERFECT_CONDITION");
+			// Room Uniqueness...!!!
+			Long hotelId = room.getHotelRoom().getId();
+			System.out.println(hotelId);
+			Hotel hotel = hotelRepository.getHotelByPrimarykey(hotelId);
+			System.out.println(hotel);
+			Random rand = new Random();
+			room.setRoomUniqueId(hotel.getHotelUniqueId() + "_" + rand.nextInt(100));
+			room.setHotelName(hotel.getName());
+			System.out.println(room);
 			Room roomToDB = roomRepository.save(room);
-			if (roomToDB != null) {
-				String roomUniqueId = hotelUniqueID + "_" + roomToDB.getId();
-				roomRepository.updateRoomUniqueId(roomUniqueId, roomToDB.getId());
-			}
 
 			return roomToDB;
 		} catch (Exception e) {
@@ -104,9 +116,9 @@ public class RoomService {
 		if (roomFromDB == null) {
 			throw new RoomUniqueIdException("Sorry No Room With Id:-" + roomUniqueId + "Found In The Database");
 		}
-		String hotelUniqueIdFromDB = roomFromDB.getHotelUniqueId();
+		// String hotelUniqueIdFromDB = roomFromDB.getHotelUniqueId();
 		Room roomObject = objectMapper.readValue(room, Room.class);
-		String hotelUniqueIdFromPayload = roomObject.getHotelUniqueId();
+		// String hotelUniqueIdFromPayload = roomObject.getHotelUniqueId();
 
 		JSONParser parser = new JSONParser();
 		try {
@@ -134,9 +146,6 @@ public class RoomService {
 			totalFare = totalFare + 4000;
 		}
 		roomFromDB.setTotalCost(totalFare + 10000l); // 10000 is depositte;
-		if (!hotelUniqueIdFromDB.equals(hotelUniqueIdFromPayload)) {
-			roomFromDB.setHotelUniqueId(hotelUniqueIdFromDB);
-		}
 
 		Room roomResponse = roomRepository.save(roomFromDB);
 		return roomResponse;

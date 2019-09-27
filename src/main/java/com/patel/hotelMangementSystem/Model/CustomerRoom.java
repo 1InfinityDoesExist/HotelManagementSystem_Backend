@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
@@ -33,7 +34,8 @@ public class CustomerRoom extends BaseEntity implements Serializable {
 	@Column(name = "aadhar_card_number", updatable = false)
 	@Size(min = 12, max = 12, message = "Aadhar Card Number must Be 12 Digit long")
 	@ApiModelProperty(notes = "Aadhar Card Number")
-	private Double aadharCardNumber;
+	@NotBlank(message = "AadharCardNumber is Mandatory")
+	private String aadharCardNumber;
 
 	@Column(name = "pan_card_number", updatable = false)
 	@Size(min = 9, max = 9, message = "Pan Card Number must be 9 character long")
@@ -57,6 +59,7 @@ public class CustomerRoom extends BaseEntity implements Serializable {
 
 	@Column(name = "room_unique_id", updatable = false)
 	@ApiModelProperty(notes = "Room Unique Id To Identity Each Room")
+	@NotBlank(message = "Room UniqueId is Mandatory")
 	private String roomUniqueId;
 
 	@Column(name = "hotel_unique_id")
@@ -123,13 +126,14 @@ public class CustomerRoom extends BaseEntity implements Serializable {
 	}
 
 	public CustomerRoom(Long id,
-			@Size(min = 12, max = 12, message = "Aadhar Card Number must Be 12 Digit long") Double aadharCardNumber,
+			@Size(min = 12, max = 12, message = "Aadhar Card Number must Be 12 Digit long") @NotBlank(message = "AadharCardNumber is Mandatory") String aadharCardNumber,
 			@Size(min = 9, max = 9, message = "Pan Card Number must be 9 character long") String panCardNumber,
 			@Size(min = 10, max = 10, message = "Phone Number must be 10 digit long") String phoneNumber,
-			@Email(message = "Email must be a valid email id") String email, Address address, String roomUniqueId,
-			String hotelUniqueId, Date bookedFrom, Date bookedTo, Date stayedFrom, Date stayedTo, Date checkOutDate,
-			Long totalCost, Long totalAmountPayOnInitially, Long totalAmountPayOnFinally, String paymentType,
-			String status, String acNonAcType, Long noOfBeds) {
+			@Email(message = "Email must be a valid email id") String email, Address address,
+			@NotBlank(message = "Room UniqueId is Mandatory") String roomUniqueId, String hotelUniqueId,
+			Date bookedFrom, Date bookedTo, Date stayedFrom, Date stayedTo, Date checkOutDate, Long totalCost,
+			Long totalAmountPayOnInitially, Long totalAmountPayOnFinally, String paymentType, String status,
+			String acNonAcType, Long noOfBeds) {
 		super();
 		this.id = id;
 		this.aadharCardNumber = aadharCardNumber;
@@ -161,11 +165,11 @@ public class CustomerRoom extends BaseEntity implements Serializable {
 		this.id = id;
 	}
 
-	public Double getAadharCardNumber() {
+	public String getAadharCardNumber() {
 		return aadharCardNumber;
 	}
 
-	public void setAadharCardNumber(Double aadharCardNumber) {
+	public void setAadharCardNumber(String aadharCardNumber) {
 		this.aadharCardNumber = aadharCardNumber;
 	}
 
