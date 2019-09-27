@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -39,10 +41,10 @@ public class Customer extends BaseEntity {
 	private Long id;
 
 	@Column(name = "aadhar_card_number", updatable = false)
-	@Size(min = 12, max = 12, message = "Aadhar Card Number must Be 12 Digit long")
+	@Size(min = 12, max = 12, message = "Pan Card Number must be 9 character long")
 	@ApiModelProperty(notes = "Aadhar Card Number")
-	@NotBlank(message = "Aadhar Card Field is Mandatory")
-	private Double aadharCardNumber;
+	// @NotBlank(message = "AadharCardNumber is Mandatory")
+	private String aadharCardNumber;
 
 	@Column(name = "pan_card_number", updatable = false)
 	@Size(min = 9, max = 9, message = "Pan Card Number must be 9 character long")
@@ -101,7 +103,7 @@ public class Customer extends BaseEntity {
 
 	@Column(name = "status")
 	@ApiModelProperty(notes = "Status Of The Customer")
-	private String Status;
+	private String status;
 
 	public Customer() {
 		super();
@@ -114,31 +116,6 @@ public class Customer extends BaseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Customer(Long id,
-			@Size(min = 12, max = 12, message = "Aadhar Card Number must Be 12 Digit long") Double aadharCardNumber,
-			@Size(min = 9, max = 9, message = "Pan Card Number must be 9 character long") String panCardNumber,
-			@Size(min = 10, max = 10, message = "Phone Number must be 10 digit long") String phoneNumber,
-			@Email(message = "Email must be a valid email id") String email, Address address, String paymentType,
-			Date bookedFrom, Date bookedTo, Date reservedFrom, Date reservedTo, Long totalCost,
-			Long totalAmountPayOnInitially, Long totalAmountPayOnFinally, String status) {
-		super();
-		this.id = id;
-		this.aadharCardNumber = aadharCardNumber;
-		this.panCardNumber = panCardNumber;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.address = address;
-		this.paymentType = paymentType;
-		this.bookedFrom = bookedFrom;
-		this.bookedTo = bookedTo;
-		this.reservedFrom = reservedFrom;
-		this.reservedTo = reservedTo;
-		this.totalCost = totalCost;
-		this.totalAmountPayOnInitially = totalAmountPayOnInitially;
-		this.totalAmountPayOnFinally = totalAmountPayOnFinally;
-		Status = status;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -147,11 +124,11 @@ public class Customer extends BaseEntity {
 		this.id = id;
 	}
 
-	public Double getAadharCardNumber() {
+	public String getAadharCardNumber() {
 		return aadharCardNumber;
 	}
 
-	public void setAadharCardNumber(Double aadharCardNumber) {
+	public void setAadharCardNumber(String aadharCardNumber) {
 		this.aadharCardNumber = aadharCardNumber;
 	}
 
@@ -252,18 +229,17 @@ public class Customer extends BaseEntity {
 	}
 
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(String status) {
-		Status = status;
+		this.status = status;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((Status == null) ? 0 : Status.hashCode());
 		result = prime * result + ((aadharCardNumber == null) ? 0 : aadharCardNumber.hashCode());
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((bookedFrom == null) ? 0 : bookedFrom.hashCode());
@@ -275,6 +251,7 @@ public class Customer extends BaseEntity {
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		result = prime * result + ((reservedFrom == null) ? 0 : reservedFrom.hashCode());
 		result = prime * result + ((reservedTo == null) ? 0 : reservedTo.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((totalAmountPayOnFinally == null) ? 0 : totalAmountPayOnFinally.hashCode());
 		result = prime * result + ((totalAmountPayOnInitially == null) ? 0 : totalAmountPayOnInitially.hashCode());
 		result = prime * result + ((totalCost == null) ? 0 : totalCost.hashCode());
@@ -290,11 +267,6 @@ public class Customer extends BaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Customer other = (Customer) obj;
-		if (Status == null) {
-			if (other.Status != null)
-				return false;
-		} else if (!Status.equals(other.Status))
-			return false;
 		if (aadharCardNumber == null) {
 			if (other.aadharCardNumber != null)
 				return false;
@@ -350,6 +322,11 @@ public class Customer extends BaseEntity {
 				return false;
 		} else if (!reservedTo.equals(other.reservedTo))
 			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
 		if (totalAmountPayOnFinally == null) {
 			if (other.totalAmountPayOnFinally != null)
 				return false;
@@ -375,7 +352,7 @@ public class Customer extends BaseEntity {
 				+ paymentType + ", bookedFrom=" + bookedFrom + ", bookedTo=" + bookedTo + ", reservedFrom="
 				+ reservedFrom + ", reservedTo=" + reservedTo + ", totalCost=" + totalCost
 				+ ", totalAmountPayOnInitially=" + totalAmountPayOnInitially + ", totalAmountPayOnFinally="
-				+ totalAmountPayOnFinally + ", Status=" + Status + "]";
+				+ totalAmountPayOnFinally + ", status=" + status + "]";
 	}
 
 }

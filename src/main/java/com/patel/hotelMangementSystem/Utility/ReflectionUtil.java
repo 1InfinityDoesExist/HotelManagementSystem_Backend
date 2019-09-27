@@ -21,6 +21,7 @@ public class ReflectionUtil {
 			put("Hotel", "com.patel.hotelMangementSystem.Model.Hotel");
 			put("Address", "com.patel.hotelMangementSystem.Model.Address");
 			put("Room", "com.patel.hotelMangementSystem.Model.Room");
+			put("Customer", "com.patel.hotelMangementSystem.Model.Customer");
 
 		}
 	};

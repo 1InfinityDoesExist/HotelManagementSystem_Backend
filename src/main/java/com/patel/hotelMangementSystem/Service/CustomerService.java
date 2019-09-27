@@ -42,6 +42,7 @@ public class CustomerService {
 	public Customer persistCustomer(Customer customer)
 			throws PanCardNumberAlreadyExistException, EmailIdAlreadyExistException, PhoneNumberAlreadyExist {
 		try {
+			customer.setDeleteFlag(false);
 			Customer customerToDB = customerRepository.save(customer);
 			return customerToDB;
 		} catch (Exception e) {
@@ -57,6 +58,15 @@ public class CustomerService {
 					"Sorry No Data Found With aadharNumber:- " + aadharNumber + "and PhoneNumber:- " + phoneNumber);
 		}
 		return customer;
+	}
+
+	public List<Customer> getCustomerDetailsByAadharaCardNumber(String aadharCardNumber) {
+		List<Customer> specificCustomerDetails = customerRepository.getCustomerDetailsByAadharNumber(aadharCardNumber);
+		if (specificCustomerDetails == null || specificCustomerDetails.size() == 0) {
+			throw new AadharCardNumberAlreadyExistException(
+					"Sorry Customer Details Found For: -" + aadharCardNumber + " AadharCardNumber");
+		}
+		return specificCustomerDetails;
 	}
 
 	public List<Customer> getAllCustomer() {
@@ -86,6 +96,7 @@ public class CustomerService {
 					"Sorry No Data Found for AadharCard :- " + aadharCardNumber);
 
 		}
+		System.out.println(customerFromDB);
 		JSONParser parser = new JSONParser();
 		try {
 			JSONObject obj = (JSONObject) parser.parse(customer);
@@ -100,6 +111,8 @@ public class CustomerService {
 						}
 						for (Object src : addressObject.keySet()) {
 							String props = (String) src;
+
+							System.out.println(props + "----->" + addressObject.get(props));
 							refUtil.getSetterMethod("Address", props).invoke(customerFromDB.getAddress(),
 									addressObject.get(props));
 						}
@@ -108,6 +121,7 @@ public class CustomerService {
 						customerFromDB.setAddress(null);
 					}
 				} else {
+					System.out.println(propName + "----->" + obj.get(propName));
 					refUtil.getSetterMethod("Customer", propName).invoke(customerFromDB, obj.get(propName));
 				}
 			}

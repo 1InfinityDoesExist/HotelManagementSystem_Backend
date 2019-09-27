@@ -28,4 +28,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 	@Query("Select Customer from #{#entityName} Customer where aadharCardNumber=?1")
 	public Customer getCustomerByAadharNumber(String aadharCardNumber);
 
+	@Query("Select Customer from #{#entityName} Customer where aadharCardNumber=?1")
+	public List<Customer> getCustomerDetailsByAadharNumber(String aadharCardNumber);
+
 }
