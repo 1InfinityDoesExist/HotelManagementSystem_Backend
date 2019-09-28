@@ -62,7 +62,7 @@ public class Hotel extends BaseEntity implements Serializable {
 	@NotBlank(message = "HotelConactNumber is Mandatory")
 	private String hotelContactNumber;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "hotelRoom")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hotelID")
 	Set<Room> room = new LinkedHashSet<Room>();
 
 	public Hotel() {

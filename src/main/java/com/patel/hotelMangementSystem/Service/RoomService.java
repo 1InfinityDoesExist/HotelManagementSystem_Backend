@@ -69,7 +69,7 @@ public class RoomService {
 			room.setNotes("Highly Recommended For Couples");
 			room.setRoomConditonStatus("PERFECT_CONDITION");
 			// Room Uniqueness...!!!
-			Long hotelId = room.getHotelRoom().getId();
+			Long hotelId = room.getHotelID();
 			System.out.println(hotelId);
 			Hotel hotel = hotelRepository.getHotelByPrimarykey(hotelId);
 			System.out.println(hotel);

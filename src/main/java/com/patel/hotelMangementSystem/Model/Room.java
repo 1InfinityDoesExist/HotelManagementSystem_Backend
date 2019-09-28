@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
@@ -73,12 +73,10 @@ public class Room extends BaseEntity implements Serializable {
 	private String roomConditonStatus;
 
 	@Column(name = "hotel_name")
-	@ApiModelProperty(name = "Hotel Name")
 	private String hotelName;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "hotelUniqueId", nullable = false, updatable = false)
-	private Hotel hotelRoom;
+	private Long hotelID;
 
 	public Room() {
 		super();
@@ -93,7 +91,8 @@ public class Room extends BaseEntity implements Serializable {
 	public Room(String roomUniqueId, String status, Date bookedFrom, Date bookedTo, Date reservedFrom, Date reservedTo,
 			Long totalCost, @NotBlank(message = "Ac / Non Ac Must Be Selected Mandatory Field") String roomColdness,
 			@Min(value = 1, message = "Min Number of beds must be 1") @Max(value = 2, message = "Max Number of bes must be 2") Long noOfBeds,
-			@NotBlank(message = "Room Condition Status Cannot be blank") String roomConditonStatus, String hotelName) {
+			@NotBlank(message = "Room Condition Status Cannot be blank") String roomConditonStatus, String hotelName,
+			Long hotelID) {
 		super();
 		this.roomUniqueId = roomUniqueId;
 		this.status = status;
@@ -106,15 +105,7 @@ public class Room extends BaseEntity implements Serializable {
 		this.noOfBeds = noOfBeds;
 		this.roomConditonStatus = roomConditonStatus;
 		this.hotelName = hotelName;
-	}
-
-	@JsonIgnore
-	public Hotel getHotelRoom() {
-		return hotelRoom;
-	}
-
-	public void setHotelRoom(Hotel hotelRoom) {
-		this.hotelRoom = hotelRoom;
+		this.hotelID = hotelID;
 	}
 
 	public String getRoomUniqueId() {
@@ -205,12 +196,21 @@ public class Room extends BaseEntity implements Serializable {
 		this.hotelName = hotelName;
 	}
 
+	public Long getHotelID() {
+		return hotelID;
+	}
+
+	public void setHotelID(Long hotelID) {
+		this.hotelID = hotelID;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((bookedFrom == null) ? 0 : bookedFrom.hashCode());
 		result = prime * result + ((bookedTo == null) ? 0 : bookedTo.hashCode());
+		result = prime * result + ((hotelID == null) ? 0 : hotelID.hashCode());
 		result = prime * result + ((hotelName == null) ? 0 : hotelName.hashCode());
 		result = prime * result + ((noOfBeds == null) ? 0 : noOfBeds.hashCode());
 		result = prime * result + ((reservedFrom == null) ? 0 : reservedFrom.hashCode());
@@ -241,6 +241,11 @@ public class Room extends BaseEntity implements Serializable {
 			if (other.bookedTo != null)
 				return false;
 		} else if (!bookedTo.equals(other.bookedTo))
+			return false;
+		if (hotelID == null) {
+			if (other.hotelID != null)
+				return false;
+		} else if (!hotelID.equals(other.hotelID))
 			return false;
 		if (hotelName == null) {
 			if (other.hotelName != null)
@@ -295,7 +300,8 @@ public class Room extends BaseEntity implements Serializable {
 		return "Room [roomUniqueId=" + roomUniqueId + ", status=" + status + ", bookedFrom=" + bookedFrom
 				+ ", bookedTo=" + bookedTo + ", reservedFrom=" + reservedFrom + ", reservedTo=" + reservedTo
 				+ ", totalCost=" + totalCost + ", roomColdness=" + roomColdness + ", noOfBeds=" + noOfBeds
-				+ ", roomConditonStatus=" + roomConditonStatus + ", hotelName=" + hotelName + "]";
+				+ ", roomConditonStatus=" + roomConditonStatus + ", hotelName=" + hotelName + ", hotelID=" + hotelID
+				+ "]";
 	}
 
 }
