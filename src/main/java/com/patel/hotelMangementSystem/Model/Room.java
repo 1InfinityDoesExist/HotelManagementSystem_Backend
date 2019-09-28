@@ -7,7 +7,6 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,7 +16,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -75,8 +74,10 @@ public class Room extends BaseEntity implements Serializable {
 	@Column(name = "hotel_name")
 	private String hotelName;
 
-	@JoinColumn(name = "hotelUniqueId", nullable = false, updatable = false)
-	private Long hotelID;
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "hotelUniqueId", columnDefinition = "bigint", referencedColumnName = "id", nullable = false, updatable = false)
+	@JsonIgnoreProperties("room")
+	private Hotel hotelID;
 
 	public Room() {
 		super();
@@ -91,8 +92,7 @@ public class Room extends BaseEntity implements Serializable {
 	public Room(String roomUniqueId, String status, Date bookedFrom, Date bookedTo, Date reservedFrom, Date reservedTo,
 			Long totalCost, @NotBlank(message = "Ac / Non Ac Must Be Selected Mandatory Field") String roomColdness,
 			@Min(value = 1, message = "Min Number of beds must be 1") @Max(value = 2, message = "Max Number of bes must be 2") Long noOfBeds,
-			@NotBlank(message = "Room Condition Status Cannot be blank") String roomConditonStatus, String hotelName,
-			Long hotelID) {
+			@NotBlank(message = "Room Condition Status Cannot be blank") String roomConditonStatus, String hotelName) {
 		super();
 		this.roomUniqueId = roomUniqueId;
 		this.status = status;
@@ -105,6 +105,13 @@ public class Room extends BaseEntity implements Serializable {
 		this.noOfBeds = noOfBeds;
 		this.roomConditonStatus = roomConditonStatus;
 		this.hotelName = hotelName;
+	}
+
+	public Hotel getHotelID() {
+		return hotelID;
+	}
+
+	public void setHotelID(Hotel hotelID) {
 		this.hotelID = hotelID;
 	}
 
@@ -194,14 +201,6 @@ public class Room extends BaseEntity implements Serializable {
 
 	public void setHotelName(String hotelName) {
 		this.hotelName = hotelName;
-	}
-
-	public Long getHotelID() {
-		return hotelID;
-	}
-
-	public void setHotelID(Long hotelID) {
-		this.hotelID = hotelID;
 	}
 
 	@Override

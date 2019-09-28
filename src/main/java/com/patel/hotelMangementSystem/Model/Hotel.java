@@ -21,7 +21,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -62,8 +62,9 @@ public class Hotel extends BaseEntity implements Serializable {
 	@NotBlank(message = "HotelConactNumber is Mandatory")
 	private String hotelContactNumber;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hotelID")
-	Set<Room> room = new LinkedHashSet<Room>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true, mappedBy = "hotelID")
+	@JsonIgnoreProperties("hotelID")
+	public Set<Room> room = new LinkedHashSet<Room>();
 
 	public Hotel() {
 		super();

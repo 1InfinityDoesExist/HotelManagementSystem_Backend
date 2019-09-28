@@ -63,20 +63,17 @@ public class RoomService {
 			} else {
 				totalFare = totalFare + 4000;
 			}
-			
+
 			room.setTotalCost(totalFare + 10000l); // 10000 is depositte;
 			room.setDeleteFlag(false);
 			room.setNotes("Highly Recommended For Couples");
 			room.setRoomConditonStatus("PERFECT_CONDITION");
 			// Room Uniqueness...!!!
-			Long hotelId = room.getHotelID();
-			System.out.println(hotelId);
+			Long hotelId = room.getHotelID().getId();
 			Hotel hotel = hotelRepository.getHotelByPrimarykey(hotelId);
-			System.out.println(hotel);
 			Random rand = new Random();
 			room.setRoomUniqueId(hotel.getHotelUniqueId() + "_" + rand.nextInt(100));
 			room.setHotelName(hotel.getName());
-			System.out.println(room);
 			Room roomToDB = roomRepository.save(room);
 
 			return roomToDB;
