@@ -21,13 +21,23 @@ import com.patel.hotelMangementSystem.Exception.PanCardNumberAlreadyExistExcepti
 import com.patel.hotelMangementSystem.Exception.PhoneNumberAlreadyExist;
 import com.patel.hotelMangementSystem.Model.Address;
 import com.patel.hotelMangementSystem.Model.Customer;
+import com.patel.hotelMangementSystem.Model.CustomerRoom;
+import com.patel.hotelMangementSystem.Model.Room;
 import com.patel.hotelMangementSystem.Repository.CustomerRepository;
+import com.patel.hotelMangementSystem.Repository.CustomerRoomRepository;
+import com.patel.hotelMangementSystem.Repository.RoomRepository;
 import com.patel.hotelMangementSystem.Utility.ReflectionUtil;
 
 @Service
 public class CustomerService {
 	@Autowired
 	private CustomerRepository customerRepository;
+
+	@Autowired
+	private RoomRepository roomRepository;
+
+	@Autowired
+	private CustomerRoomRepository customerRoomRepository;
 
 	ReflectionUtil refUtil = ReflectionUtil.getInstance();
 
@@ -39,15 +49,43 @@ public class CustomerService {
 		objectMapper.registerModule(new JavaTimeModule());
 	}
 
-	public Customer persistCustomer(Customer customer)
-			throws PanCardNumberAlreadyExistException, EmailIdAlreadyExistException, PhoneNumberAlreadyExist {
+	public Customer persistCustomer(Customer customer) {
 		try {
 			customer.setDeleteFlag(false);
 			Customer customerToDB = customerRepository.save(customer);
+			roomRepository.updatRoomAvailibility("NOT_AVAILABLE", customerToDB.getRoomID().getId());
+			Long customerId = customerToDB.getId();
+			Room room = roomRepository.getRoomById(customer.getRoomID().getId());
+			CustomerRoom customerRoom = new CustomerRoom();
+
+			customerRoom.setAadharCardNumber(customerToDB.getAadharCardNumber());
+			customerRoom.setDeleteFlag(false);
+			customerRoom.setAddress(customerToDB.getAddress());
+			customerRoom.setPanCardNumber(customerToDB.getPanCardNumber());
+			customerRoom.setPhoneNumber(customerToDB.getPhoneNumber());
+			customerRoom.setEmail(customerToDB.getEmail());
+			customerRoom.setRoomUniqueId(room.getRoomUniqueId());
+			customerRoom.setHotelUniqueId(room.getHotelID().getHotelUniqueId());
+			customerRoom.setBookedFrom(room.getBookedFrom());
+			customerRoom.setBookedTo(room.getBookedTo());
+			customerRoom.setStayedFrom(room.getReservedFrom());
+			customerRoom.setStayedTo(room.getReservedTo());
+			customerRoom.setTotalCost(room.getTotalCost());
+			customerRoom.setAcNonAcType(room.getRoomColdness());
+			customerRoom.setNoOfBeds(room.getNoOfBeds());
+			customerRoomRepository.save(customerRoom);
+
 			return customerToDB;
-		} catch (Exception e) {
-			throw new AadharCardNumberAlreadyExistException("Sorry Aadhar Card Nubmer Already In User");
+		} catch (AadharCardNumberAlreadyExistException ex) {
+			throw new AadharCardNumberAlreadyExistException("Sorry Aadhar Card Number is Already In Use");
+		} catch (PanCardNumberAlreadyExistException pex) {
+			throw new PanCardNumberAlreadyExistException("Sorry Pan Card Number is Already In Use");
+		} catch (PhoneNumberAlreadyExist pex) {
+			throw new PhoneNumberAlreadyExist("Sorry PhoneNumber is Already In Use");
+		} catch (EmailIdAlreadyExistException emailEx) {
+			throw new EmailIdAlreadyExistException("Sorry Email Id Is Already In Use");
 		}
+
 	}
 
 	public Customer getCustomerByEmailAndPhoneNumber(String aadharNumber, String phoneNumber)

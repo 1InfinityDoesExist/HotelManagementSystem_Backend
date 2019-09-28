@@ -1,19 +1,19 @@
 package com.patel.hotelMangementSystem.Model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -21,6 +21,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -40,25 +42,25 @@ public class Customer extends BaseEntity {
 	@ApiModelProperty(notes = "Customer Primary Key")
 	private Long id;
 
-	@Column(name = "aadhar_card_number", updatable = false)
+	@Column(name = "aadhar_card_number", updatable = false, unique = true, insertable = true)
 	@Size(min = 12, max = 12, message = "Pan Card Number must be 9 character long")
 	@ApiModelProperty(notes = "Aadhar Card Number")
-	// @NotBlank(message = "AadharCardNumber is Mandatory")
+	@NotBlank(message = "AadharCardNumber is Mandatory")
 	private String aadharCardNumber;
 
-	@Column(name = "pan_card_number", updatable = false)
+	@Column(name = "pan_card_number", insertable = true, updatable = false, unique = true)
 	@Size(min = 9, max = 9, message = "Pan Card Number must be 9 character long")
 	@ApiModelProperty(notes = "Pan Card Number")
 	@NotBlank(message = "Pan Card Number must not be Blank")
 	private String panCardNumber;
 
-	@Column(name = "phone_number", updatable = true)
+	@Column(name = "phone_number", insertable = true, updatable = true, unique = true)
 	@Size(min = 10, max = 10, message = "Phone Number must be 10 digit long")
 	@ApiModelProperty(notes = "Phone Number of the person")
 	@NotBlank(message = "PhoneNumber is Mandatory")
 	private String phoneNumber;
 
-	@Column(name = "email")
+	@Column(name = "email", insertable = true, updatable = true, unique = true)
 	@Email(message = "Email must be a valid email id")
 	@ApiModelProperty(notes = "Email of the person")
 	@NotBlank(message = "Email id Field is Mandatory")
@@ -72,6 +74,11 @@ public class Customer extends BaseEntity {
 	@Column(name = "status")
 	@ApiModelProperty(notes = "Status Of The Customer")
 	private String status;
+
+	@OneToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "room_id", columnDefinition = "bigint", nullable = false, updatable = true, referencedColumnName = "id")
+	@JsonIgnoreProperties("customer_id")
+	private Room roomID;
 
 	public Customer() {
 		super();
@@ -98,6 +105,14 @@ public class Customer extends BaseEntity {
 		this.email = email;
 		this.address = address;
 		this.status = status;
+	}
+
+	public Room getRoomID() {
+		return roomID;
+	}
+
+	public void setRoomID(Room roomID) {
+		this.roomID = roomID;
 	}
 
 	public Long getId() {

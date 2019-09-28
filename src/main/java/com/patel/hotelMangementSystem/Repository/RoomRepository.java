@@ -30,4 +30,12 @@ public interface RoomRepository extends CrudRepository<Room, Long> {
 	@Query("Update #{#entityName} Room set roomUniqueId=?1 where id=?2")
 	public void updateRoomUniqueId(String roomUniqueId, Long id);
 
+	@Query("Select Room from #{#entityName} Room where deleteFlag=false and id=?1")
+	public Room getRoomById(Long id);
+
+	@Modifying
+	@Transactional
+	@Query("Update #{#entityName} Room set status=?1 where id=?2")
+	public void updatRoomAvailibility(String string, Long id);
+
 }

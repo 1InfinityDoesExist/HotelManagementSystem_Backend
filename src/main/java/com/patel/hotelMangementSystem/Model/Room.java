@@ -7,8 +7,10 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
@@ -79,6 +81,10 @@ public class Room extends BaseEntity implements Serializable {
 	@JsonIgnoreProperties("room")
 	private Hotel hotelID;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "roomID", orphanRemoval = true)
+	@JsonIgnoreProperties("roomID")
+	private Customer customer_id;
+
 	public Room() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -105,6 +111,14 @@ public class Room extends BaseEntity implements Serializable {
 		this.noOfBeds = noOfBeds;
 		this.roomConditonStatus = roomConditonStatus;
 		this.hotelName = hotelName;
+	}
+
+	public Customer getCustomer_id() {
+		return customer_id;
+	}
+
+	public void setCustomer_id(Customer customer_id) {
+		this.customer_id = customer_id;
 	}
 
 	public Hotel getHotelID() {

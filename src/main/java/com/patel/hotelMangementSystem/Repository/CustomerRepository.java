@@ -28,6 +28,15 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 	@Query("Select Customer from #{#entityName} Customer where aadharCardNumber=?1")
 	public Customer getCustomerByAadharNumber(String aadharCardNumber);
 
+	@Query("Select Customer from #{#entityName} Customer where panCardNumber=?1 and deleteFlag = false")
+	public Customer getCustomerByPanCard(String panCardNumber);
+
+	@Query("Select Customer from #{#entityName} Customer where phoneNumber=?1 and deleteFlag = false")
+	public Customer getCustomerByPhoneNumber(String phoneNumber);
+
+	@Query("Select Customer from #{#entityName} Customer where email=?1 and deleteFlag = false")
+	public Customer getCustomerByEmail(String email);
+
 	@Query("Select Customer from #{#entityName} Customer where aadharCardNumber=?1")
 	public List<Customer> getCustomerDetailsByAadharNumber(String aadharCardNumber);
 
