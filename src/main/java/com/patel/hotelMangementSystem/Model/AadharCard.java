@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -56,12 +58,15 @@ public class AadharCard implements Serializable {
 
 	@Column(name = "address", columnDefinition = "jsonb", insertable = true, nullable = false, updatable = true, unique = false)
 	@Type(type = "AddressType")
-	//@NotBlank(message = "Address of the Customer")
+	// @NotBlank(message = "Address of the Customer")
 	@ApiModelProperty(notes = "Address of the Customer")
 	private Address address;
 
 	@Column(name = "aadhar_number", updatable = false, nullable = false, unique = true)
 	@ApiModelProperty(notes = "AadharCard Number of the Customer Which will be uniquely Generated")
+	@NotBlank(message = "AadharCard Number Can't be Blank")
+	@NotNull(message = "AadharCard Number Can't be Null")
+	@NotEmpty(message = "AadharCard Number Can't be Empty")
 	private String aadharNumber;
 
 	public AadharCard() {
