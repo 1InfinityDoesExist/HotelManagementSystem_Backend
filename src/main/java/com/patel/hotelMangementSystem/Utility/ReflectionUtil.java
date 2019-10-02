@@ -23,6 +23,7 @@ public class ReflectionUtil {
 			put("Room", "com.patel.hotelMangementSystem.Model.Room");
 			put("Customer", "com.patel.hotelMangementSystem.Model.Customer");
 			put("AadharCard", "com.patel.hotelMangementSystem.Model.AadharCard");
+			put("PanCard", "com.patel.hotelMangementSystem.Model.PanCard");
 
 		}
 	};
